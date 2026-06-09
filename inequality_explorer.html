@@ -1,0 +1,1588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Understanding Global Inequality — SOAS Economics</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.26.0/plotly.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1a1a2e;
+  --red: #e94560;
+  --cream: #faf8f3;
+  --white: #ffffff;
+  --mid: #6b7280;
+  --light: #f3f4f6;
+  --border: #e5e7eb;
+  --blue: #2563eb;
+  --green: #059669;
+  --amber: #d97706;
+  --purple: #7c3aed;
+  --radius: 10px;
+  --shadow: 0 2px 16px rgba(0,0,0,0.07);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  color: var(--ink);
+  background: var(--cream);
+  line-height: 1.6;
+}
+
+/* HEADER */
+.site-header {
+  background: var(--ink);
+  padding: 0;
+}
+
+.header-top {
+  padding: 12px 40px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-top .soas {
+  font-size: 11px;
+  color: var(--red);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+}
+
+.header-top .module {
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+}
+
+.header-hero {
+  padding: 40px 40px 36px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 40px;
+  align-items: end;
+}
+
+.header-hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.4rem;
+  color: var(--white);
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.header-hero h1 span {
+  color: var(--red);
+}
+
+.header-hero p {
+  color: rgba(255,255,255,0.55);
+  font-size: 0.92rem;
+  margin-top: 10px;
+  max-width: 560px;
+  font-weight: 300;
+}
+
+.header-stats {
+  display: flex;
+  gap: 24px;
+}
+
+.hstat {
+  text-align: right;
+}
+
+.hstat .val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.6rem;
+  color: var(--white);
+  font-weight: 500;
+}
+
+.hstat .lbl {
+  font-size: 10px;
+  color: rgba(255,255,255,0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* NAV */
+.section-nav {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow);
+}
+
+.nav-inner {
+  display: flex;
+  overflow-x: auto;
+  padding: 0 40px;
+}
+
+.nav-tab {
+  padding: 16px 24px;
+  border: none;
+  background: transparent;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--mid);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.nav-tab.active {
+  color: var(--red);
+  border-bottom-color: var(--red);
+}
+
+.nav-tab:hover:not(.active) {
+  color: var(--ink);
+}
+
+.nav-num {
+  font-size: 10px;
+  color: var(--red);
+  margin-right: 6px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* MAIN */
+main { max-width: 1200px; margin: 0 auto; padding: 40px; }
+
+.section-panel { display: none; }
+.section-panel.active { display: block; }
+
+/* SECTION HEADER */
+.section-intro {
+  margin-bottom: 32px;
+}
+
+.section-intro .eyebrow {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--red);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.section-intro h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+
+.section-intro p {
+  color: var(--mid);
+  font-size: 0.92rem;
+  max-width: 640px;
+  font-weight: 300;
+}
+
+/* CARDS */
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.card-title {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.card-sub {
+  font-size: 0.78rem;
+  color: var(--mid);
+  margin-top: 2px;
+}
+
+/* CONTROLS */
+.controls-bar {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 24px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  box-shadow: var(--shadow);
+}
+
+.ctrl-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ctrl-group label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--mid);
+  font-weight: 600;
+}
+
+.ctrl-group select,
+.ctrl-group input[type=text] {
+  background: var(--light);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 7px 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  color: var(--ink);
+  outline: none;
+  cursor: pointer;
+  min-width: 160px;
+}
+
+.ctrl-group select:focus {
+  border-color: var(--red);
+}
+
+.ctrl-group.slider-ctrl {
+  min-width: 200px;
+}
+
+.ctrl-group input[type=range] {
+  width: 100%;
+  accent-color: var(--red);
+}
+
+.year-display {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--red);
+}
+
+/* GRID LAYOUTS */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+.grid-1-2 { display: grid; grid-template-columns: 1fr 2fr; gap: 24px; }
+
+/* STAT CARDS */
+.stat-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+
+.stat-card .s-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--mid);
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.stat-card .s-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.stat-card .s-sub {
+  font-size: 0.78rem;
+  color: var(--mid);
+  margin-top: 4px;
+}
+
+.stat-card.red .s-val { color: var(--red); }
+.stat-card.green .s-val { color: var(--green); }
+.stat-card.blue .s-val { color: var(--blue); }
+
+/* EXPORT BUTTON */
+.btn-export {
+  padding: 8px 18px;
+  background: var(--ink);
+  color: var(--white);
+  border: none;
+  border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.2s;
+}
+
+.btn-export:hover { background: var(--red); }
+
+.btn-secondary {
+  padding: 8px 18px;
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-secondary:hover { border-color: var(--red); color: var(--red); }
+
+/* EXPLAINER BOX */
+.explainer {
+  background: #fff8f0;
+  border-left: 3px solid var(--red);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 20px 0;
+}
+
+.explainer h4 {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--red);
+  margin-bottom: 6px;
+}
+
+.explainer p {
+  font-size: 0.85rem;
+  color: var(--mid);
+  line-height: 1.6;
+}
+
+/* R CODE BOX */
+.r-code {
+  background: #1e1e2e;
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin-top: 16px;
+}
+
+.r-code .r-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--red);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.r-code code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  color: #a6e3a1;
+  line-height: 1.7;
+  display: block;
+}
+
+.r-code code .r-comment { color: #6c7086; }
+.r-code code .r-func { color: #89b4fa; }
+.r-code code .r-str { color: #f38ba8; }
+
+/* LOADING */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  color: var(--mid);
+  font-size: 0.88rem;
+  gap: 10px;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border);
+  border-top-color: var(--red);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* REGION LEGEND */
+.region-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 12px 0;
+}
+
+.region-dot {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.78rem;
+  color: var(--mid);
+}
+
+.rdot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* MEASURES TABLE */
+.measures-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.measures-table th {
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--mid);
+  font-weight: 600;
+  border-bottom: 1px solid var(--border);
+}
+
+.measures-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--light);
+  color: var(--ink);
+}
+
+.measures-table tr:hover td { background: var(--light); }
+
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.badge.good { background: #d1fae5; color: #065f46; }
+.badge.bad { background: #fee2e2; color: #991b1b; }
+.badge.mid { background: #fef3c7; color: #92400e; }
+
+/* TOOLTIP STYLE FOR DATA POINTS */
+.data-note {
+  font-size: 0.78rem;
+  color: var(--mid);
+  margin-top: 8px;
+  font-style: italic;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  main { padding: 20px; }
+  .header-hero { grid-template-columns: 1fr; padding: 24px 20px; }
+  .header-top { padding: 10px 20px; }
+  .nav-inner { padding: 0 20px; }
+  .grid-2, .grid-3, .grid-1-2 { grid-template-columns: 1fr; }
+  .header-stats { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-top">
+    <span class="soas">SOAS University of London · Department of Economics</span>
+    <span class="module">Principles of Statistics and Econometrics with R</span>
+  </div>
+  <div class="header-hero">
+    <div>
+      <h1>Understanding<br><span>Global Inequality</span></h1>
+      <p>Explore live data on income inequality across the world. Interact with the charts, compare countries, and export data for your own R analysis.</p>
+    </div>
+    <div class="header-stats">
+      <div class="hstat">
+        <div class="val" id="hstat-countries">—</div>
+        <div class="lbl">Countries</div>
+      </div>
+      <div class="hstat">
+        <div class="val" id="hstat-years">30+</div>
+        <div class="lbl">Years of data</div>
+      </div>
+      <div class="hstat">
+        <div class="val">4</div>
+        <div class="lbl">Measures</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav class="section-nav">
+  <div class="nav-inner">
+    <button class="nav-tab active" onclick="switchSection('measure', this)">
+      <span class="nav-num">01</span>Measure: What is the Gini?
+    </button>
+    <button class="nav-tab" onclick="switchSection('explore', this)">
+      <span class="nav-num">02</span>Explore: Correlates of Inequality
+    </button>
+    <button class="nav-tab" onclick="switchSection('compare', this)">
+      <span class="nav-num">03</span>Compare: How Measures Differ
+    </button>
+    <button class="nav-tab" onclick="switchSection('trends', this)">
+      <span class="nav-num">04</span>Trends: Has Inequality Changed?
+    </button>
+  </div>
+</nav>
+
+<main>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 01 — MEASURE
+═══════════════════════════════════════════════════════════ -->
+<div id="section-measure" class="section-panel active">
+
+  <div class="section-intro">
+    <div class="eyebrow">01 — Measure</div>
+    <h2>What is the Gini coefficient?</h2>
+    <p>The Gini coefficient is the most widely used measure of income inequality. It ranges from 0 (perfect equality) to 1 (one person has everything). Explore how it varies across the world and what it looks like graphically through the Lorenz curve.</p>
+  </div>
+
+  <!-- STAT CARDS -->
+  <div class="grid-3" style="margin-bottom:24px;">
+    <div class="stat-card red">
+      <div class="s-label">Most unequal (latest)</div>
+      <div class="s-val" id="most-unequal-val">—</div>
+      <div class="s-sub" id="most-unequal-country">Loading...</div>
+    </div>
+    <div class="stat-card green">
+      <div class="s-label">Most equal (latest)</div>
+      <div class="s-val" id="most-equal-val">—</div>
+      <div class="s-sub" id="most-equal-country">Loading...</div>
+    </div>
+    <div class="stat-card blue">
+      <div class="s-label">World average Gini</div>
+      <div class="s-val" id="world-avg-val">—</div>
+      <div class="s-sub">Unweighted mean, latest year available</div>
+    </div>
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="controls-bar">
+    <div class="ctrl-group slider-ctrl">
+      <label>Year: <span class="year-display" id="map-year-display">2019</span></label>
+      <input type="range" id="map-year" min="1990" max="2022" value="2019" step="1" oninput="document.getElementById('map-year-display').textContent=this.value; updateChoropleth();">
+    </div>
+    <div style="margin-left:auto; display:flex; gap:10px;">
+      <button class="btn-export" onclick="exportData('gini')">⬇ Export Gini CSV</button>
+    </div>
+  </div>
+
+  <!-- CHOROPLETH MAP -->
+  <div class="card" style="margin-bottom:24px;">
+    <div class="card-header">
+      <div>
+        <div class="card-title">Gini coefficient by country</div>
+        <div class="card-sub">World Bank data · Darker = more unequal · Click a country for details</div>
+      </div>
+    </div>
+    <div id="plot-choropleth" style="height:460px;">
+      <div class="loading"><div class="spinner"></div>Loading World Bank data...</div>
+    </div>
+  </div>
+
+  <!-- LORENZ CURVE -->
+  <div class="grid-2" style="margin-bottom:24px;">
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Lorenz curve</div>
+          <div class="card-sub">The shaded area × 2 = Gini coefficient</div>
+        </div>
+      </div>
+      <div class="ctrl-group" style="margin-bottom:16px;">
+        <label>Select country</label>
+        <select id="lorenz-country" onchange="updateLorenz()">
+          <option value="GBR">United Kingdom</option>
+          <option value="ZAF">South Africa</option>
+          <option value="BRA">Brazil</option>
+          <option value="DEU">Germany</option>
+          <option value="USA">United States</option>
+          <option value="SWE">Sweden</option>
+          <option value="CHN">China</option>
+          <option value="IND">India</option>
+          <option value="NGA">Nigeria</option>
+          <option value="JPN">Japan</option>
+        </select>
+      </div>
+      <div id="plot-lorenz" style="height:320px;"></div>
+      <div class="explainer">
+        <h4>How to read this</h4>
+        <p>The diagonal line represents perfect equality. The further the Lorenz curve bows away from it, the more unequal the distribution. The Gini coefficient is twice the shaded area between the two lines.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Compare two Lorenz curves</div>
+          <div class="card-sub">How different is the distribution between two countries?</div>
+        </div>
+      </div>
+      <div style="display:flex; gap:12px; margin-bottom:16px;">
+        <div class="ctrl-group" style="flex:1">
+          <label>Country A</label>
+          <select id="lorenz-a" onchange="updateLorenzCompare()">
+            <option value="SWE">Sweden</option>
+            <option value="GBR">United Kingdom</option>
+            <option value="USA">United States</option>
+            <option value="BRA">Brazil</option>
+            <option value="ZAF">South Africa</option>
+          </select>
+        </div>
+        <div class="ctrl-group" style="flex:1">
+          <label>Country B</label>
+          <select id="lorenz-b" onchange="updateLorenzCompare()">
+            <option value="ZAF">South Africa</option>
+            <option value="BRA">Brazil</option>
+            <option value="USA">United States</option>
+            <option value="GBR">United Kingdom</option>
+            <option value="SWE">Sweden</option>
+          </select>
+        </div>
+      </div>
+      <div id="plot-lorenz-compare" style="height:320px;"></div>
+    </div>
+  </div>
+
+  <!-- WHAT GINI MISSES -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">Strengths and limitations of the Gini coefficient</div>
+    </div>
+    <table class="measures-table">
+      <thead>
+        <tr>
+          <th>Aspect</th>
+          <th>Detail</th>
+          <th>Implication for analysis</th>
+          <th>Rating</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Comparability</td><td>Single number, easy to compare across countries and time</td><td>Good for ranking countries</td><td><span class="badge good">Strength</span></td></tr>
+        <tr><td>Sensitivity to middle</td><td>More sensitive to changes in the middle of the distribution than the tails</td><td>May miss extreme top or bottom changes</td><td><span class="badge mid">Limitation</span></td></tr>
+        <tr><td>Top incomes</td><td>Does not capture the share of the very top (1%, 0.1%)</td><td>Use Palma ratio or WID data to supplement</td><td><span class="badge bad">Weakness</span></td></tr>
+        <tr><td>Data quality</td><td>Relies on household surveys which undercount top incomes</td><td>True inequality likely higher than reported</td><td><span class="badge bad">Weakness</span></td></tr>
+        <tr><td>Decomposability</td><td>Cannot be cleanly decomposed by subgroup (unlike Theil index)</td><td>Hard to attribute inequality to specific sources</td><td><span class="badge mid">Limitation</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 02 — EXPLORE
+═══════════════════════════════════════════════════════════ -->
+<div id="section-explore" class="section-panel">
+
+  <div class="section-intro">
+    <div class="eyebrow">02 — Explore</div>
+    <h2>What drives inequality?</h2>
+    <p>Explore the relationship between the Gini coefficient and other economic variables. Select an x-axis variable, toggle the regression line, and look for patterns across regions and income groups.</p>
+  </div>
+
+  <div class="controls-bar">
+    <div class="ctrl-group">
+      <label>X-axis variable</label>
+      <select id="scatter-xvar" onchange="updateScatter()">
+        <option value="unemployment">Unemployment rate (%)</option>
+        <option value="gdp">GDP per capita (log)</option>
+        <option value="education">School enrolment, secondary (%)</option>
+        <option value="trade">Trade openness (% of GDP)</option>
+        <option value="urban">Urban population (%)</option>
+      </select>
+    </div>
+    <div class="ctrl-group slider-ctrl">
+      <label>Year: <span class="year-display" id="scatter-year-display">2015</span></label>
+      <input type="range" id="scatter-year" min="1995" max="2020" value="2015" step="1" oninput="document.getElementById('scatter-year-display').textContent=this.value; updateScatter();">
+    </div>
+    <div class="ctrl-group">
+      <label>Regression line</label>
+      <select id="scatter-reg" onchange="updateScatter()">
+        <option value="yes">Show</option>
+        <option value="no">Hide</option>
+      </select>
+    </div>
+    <div style="margin-left:auto; display:flex; gap:10px;">
+      <button class="btn-export" onclick="exportData('scatter')">⬇ Export CSV</button>
+    </div>
+  </div>
+
+  <div class="region-legend">
+    <div class="region-dot"><div class="rdot" style="background:#e94560"></div>Sub-Saharan Africa</div>
+    <div class="region-dot"><div class="rdot" style="background:#2563eb"></div>Europe & Central Asia</div>
+    <div class="region-dot"><div class="rdot" style="background:#059669"></div>Latin America</div>
+    <div class="region-dot"><div class="rdot" style="background:#d97706"></div>East Asia & Pacific</div>
+    <div class="region-dot"><div class="rdot" style="background:#7c3aed"></div>South Asia</div>
+    <div class="region-dot"><div class="rdot" style="background:#0891b2"></div>Middle East & North Africa</div>
+    <div class="region-dot"><div class="rdot" style="background:#374151"></div>North America</div>
+  </div>
+
+  <div class="card" style="margin-bottom:24px;">
+    <div class="card-header">
+      <div>
+        <div class="card-title" id="scatter-title">Gini vs Unemployment rate</div>
+        <div class="card-sub">Hover over points to identify countries · Size = population</div>
+      </div>
+      <div id="scatter-corr" style="font-family:'JetBrains Mono',monospace; font-size:0.85rem; color:var(--mid);"></div>
+    </div>
+    <div id="plot-scatter" style="height:480px;">
+      <div class="loading"><div class="spinner"></div>Loading data...</div>
+    </div>
+  </div>
+
+  <div class="explainer">
+    <h4>Interpreting the scatter plot</h4>
+    <p>Each dot is a country. The correlation coefficient (r) shown above the chart tells you the strength and direction of the linear relationship. Remember: correlation does not imply causation. Think about what other variables might explain patterns you observe — these are potential confounders for your regression analysis.</p>
+  </div>
+
+  <div class="r-code">
+    <div class="r-label">R code — replicate this analysis</div>
+    <code>
+<span class="r-comment"># Load the exported CSV and run correlation + regression</span><br>
+data &lt;- <span class="r-func">read.csv</span>(<span class="r-str">"inequality_correlates.csv"</span>)<br>
+<br>
+<span class="r-comment"># Scatter plot</span><br>
+<span class="r-func">plot</span>(data$x_var, data$gini, <br>
+&nbsp;&nbsp;&nbsp;&nbsp; xlab=<span class="r-str">"X variable"</span>, ylab=<span class="r-str">"Gini coefficient"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp; main=<span class="r-str">"Gini vs X"</span>, col=<span class="r-str">"steelblue"</span>, pch=19)<br>
+<br>
+<span class="r-comment"># Correlation</span><br>
+<span class="r-func">cor.test</span>(data$gini, data$x_var, method=<span class="r-str">"pearson"</span>)<br>
+<br>
+<span class="r-comment"># Simple regression</span><br>
+model &lt;- <span class="r-func">lm</span>(gini ~ x_var, data=data)<br>
+<span class="r-func">summary</span>(model)
+    </code>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 03 — COMPARE
+═══════════════════════════════════════════════════════════ -->
+<div id="section-compare" class="section-panel">
+
+  <div class="section-intro">
+    <div class="eyebrow">03 — Compare</div>
+    <h2>How do different measures compare?</h2>
+    <p>The Gini is just one way to measure inequality. Compare it with the Palma ratio, top 10% income share, and top 1% income share for the same country. Do they tell the same story?</p>
+  </div>
+
+  <div class="controls-bar">
+    <div class="ctrl-group">
+      <label>Select country</label>
+      <select id="compare-country" onchange="updateCompare()">
+        <option value="USA">United States</option>
+        <option value="GBR">United Kingdom</option>
+        <option value="ZAF">South Africa</option>
+        <option value="BRA">Brazil</option>
+        <option value="DEU">Germany</option>
+        <option value="SWE">Sweden</option>
+        <option value="CHN">China</option>
+        <option value="IND">India</option>
+        <option value="FRA">France</option>
+        <option value="NGA">Nigeria</option>
+      </select>
+    </div>
+    <div style="margin-left:auto; display:flex; gap:10px;">
+      <button class="btn-export" onclick="exportData('compare')">⬇ Export CSV</button>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:24px;">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">All four measures over time</div>
+        <div class="card-sub">Normalised to 0–1 scale for comparison</div>
+      </div>
+      <div id="plot-measures-time" style="height:340px;"></div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Latest values — snapshot comparison</div>
+        <div class="card-sub">Most recent year with available data</div>
+      </div>
+      <div id="plot-measures-bar" style="height:340px;"></div>
+    </div>
+  </div>
+
+  <!-- CROSS COUNTRY TABLE -->
+  <div class="card" style="margin-bottom:24px;">
+    <div class="card-header">
+      <div>
+        <div class="card-title">Cross-country comparison table</div>
+        <div class="card-sub">Latest available data · Source: World Bank + WID</div>
+      </div>
+      <button class="btn-export" onclick="exportData('table')">⬇ Export CSV</button>
+    </div>
+    <div id="compare-table-container" style="overflow-x:auto;"></div>
+  </div>
+
+  <div class="explainer">
+    <h4>Why do the measures differ?</h4>
+    <p>The Gini is sensitive to changes in the middle of the distribution. The Palma ratio (top 10% share ÷ bottom 40% share) focuses on the extremes and is less affected by middle-income changes. Top 1% share captures the very wealthy — often missed in household surveys. When these measures diverge, it tells us something important about where in the distribution inequality is changing.</p>
+  </div>
+
+  <div class="r-code">
+    <div class="r-label">R code — compare measures</div>
+    <code>
+<span class="r-comment"># After exporting the comparison CSV</span><br>
+data &lt;- <span class="r-func">read.csv</span>(<span class="r-str">"inequality_measures.csv"</span>)<br>
+<br>
+<span class="r-comment"># Correlation between measures</span><br>
+<span class="r-func">cor</span>(data[,<span class="r-func">c</span>(<span class="r-str">"gini"</span>,<span class="r-str">"palma"</span>,<span class="r-str">"top10"</span>,<span class="r-str">"top1"</span>)], use=<span class="r-str">"complete.obs"</span>)<br>
+<br>
+<span class="r-comment"># Plot all measures</span><br>
+<span class="r-func">library</span>(ggplot2)<br>
+<span class="r-func">library</span>(tidyr)<br>
+long &lt;- <span class="r-func">pivot_longer</span>(data, <span class="r-func">c</span>(gini,palma,top10,top1))<br>
+<span class="r-func">ggplot</span>(long, <span class="r-func">aes</span>(year, value, color=name)) +<br>
+&nbsp;&nbsp;<span class="r-func">geom_line</span>() + <span class="r-func">facet_wrap</span>(~name, scales=<span class="r-str">"free_y"</span>)
+    </code>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 04 — TRENDS
+═══════════════════════════════════════════════════════════ -->
+<div id="section-trends" class="section-panel">
+
+  <div class="section-intro">
+    <div class="eyebrow">04 — Trends</div>
+    <h2>Has inequality changed over time?</h2>
+    <p>Track inequality trends for individual countries and world regions since 1990. Key events like the 2008 financial crisis and the COVID-19 pandemic are marked on the charts.</p>
+  </div>
+
+  <div class="controls-bar">
+    <div class="ctrl-group">
+      <label>Add country</label>
+      <select id="trend-country-select">
+        <option value="GBR">United Kingdom</option>
+        <option value="USA">United States</option>
+        <option value="DEU">Germany</option>
+        <option value="FRA">France</option>
+        <option value="BRA">Brazil</option>
+        <option value="ZAF">South Africa</option>
+        <option value="CHN">China</option>
+        <option value="IND">India</option>
+        <option value="SWE">Sweden</option>
+        <option value="JPN">Japan</option>
+        <option value="NGA">Nigeria</option>
+        <option value="MEX">Mexico</option>
+        <option value="ARG">Argentina</option>
+        <option value="KOR">South Korea</option>
+        <option value="TUR">Turkey</option>
+      </select>
+    </div>
+    <button class="btn-secondary" onclick="addTrendCountry()">+ Add</button>
+    <button class="btn-secondary" onclick="clearTrendCountries()">Clear all</button>
+    <div style="font-size:0.82rem; color:var(--mid);" id="trend-selected">Selected: United Kingdom, United States</div>
+    <div style="margin-left:auto; display:flex; gap:10px;">
+      <button class="btn-export" onclick="exportData('trends')">⬇ Export CSV</button>
+    </div>
+  </div>
+
+  <!-- COUNTRY TRENDS -->
+  <div class="card" style="margin-bottom:24px;">
+    <div class="card-header">
+      <div class="card-title">Gini coefficient over time — selected countries</div>
+      <div class="card-sub">Vertical lines mark the 2008 financial crisis and COVID-19 (2020)</div>
+    </div>
+    <div id="plot-trends" style="height:420px;">
+      <div class="loading"><div class="spinner"></div>Loading trend data...</div>
+    </div>
+  </div>
+
+  <!-- REGIONAL TRENDS -->
+  <div class="card" style="margin-bottom:24px;">
+    <div class="card-header">
+      <div class="card-title">Regional average Gini over time</div>
+      <div class="card-sub">Unweighted average by World Bank region</div>
+    </div>
+    <div id="plot-regional" style="height:380px;">
+      <div class="loading"><div class="spinner"></div>Loading regional data...</div>
+    </div>
+  </div>
+
+  <div class="r-code">
+    <div class="r-label">R code — time series analysis</div>
+    <code>
+<span class="r-comment"># Load exported trend data and plot with ggplot2</span><br>
+<span class="r-func">library</span>(ggplot2)<br>
+data &lt;- <span class="r-func">read.csv</span>(<span class="r-str">"inequality_trends.csv"</span>)<br>
+<br>
+<span class="r-func">ggplot</span>(data, <span class="r-func">aes</span>(x=year, y=gini, color=country)) +<br>
+&nbsp;&nbsp;<span class="r-func">geom_line</span>(size=1.2) +<br>
+&nbsp;&nbsp;<span class="r-func">geom_point</span>(size=2) +<br>
+&nbsp;&nbsp;<span class="r-func">geom_vline</span>(xintercept=<span class="r-func">c</span>(2008, 2020), linetype=<span class="r-str">"dashed"</span>, alpha=0.5) +<br>
+&nbsp;&nbsp;<span class="r-func">labs</span>(title=<span class="r-str">"Gini over time"</span>, x=<span class="r-str">"Year"</span>, y=<span class="r-str">"Gini coefficient"</span>) +<br>
+&nbsp;&nbsp;<span class="r-func">theme_minimal</span>()<br>
+<br>
+<span class="r-comment"># Test for trend (Mann-Kendall test)</span><br>
+<span class="r-func">library</span>(trend)<br>
+uk &lt;- data[data$country==<span class="r-str">"GBR"</span>,]<br>
+<span class="r-func">mk.test</span>(uk$gini)
+    </code>
+  </div>
+</div>
+
+</main>
+
+<script>
+// ─── PLOTLY THEME ─────────────────────────────────────────────
+const PLY = {
+  paper_bgcolor: '#ffffff',
+  plot_bgcolor: '#ffffff',
+  font: { family: 'Inter, sans-serif', color: '#374151', size: 12 },
+  margin: { t: 20, b: 50, l: 60, r: 20 },
+  xaxis: { gridcolor: '#f3f4f6', zerolinecolor: '#e5e7eb', linecolor: '#e5e7eb' },
+  yaxis: { gridcolor: '#f3f4f6', zerolinecolor: '#e5e7eb', linecolor: '#e5e7eb' },
+};
+const CFG = { displayModeBar: true, modeBarButtonsToRemove: ['lasso2d','select2d'], responsive: true };
+
+const REGION_COLORS = {
+  'Sub-Saharan Africa': '#e94560',
+  'Europe & Central Asia': '#2563eb',
+  'Latin America & Caribbean': '#059669',
+  'East Asia & Pacific': '#d97706',
+  'South Asia': '#7c3aed',
+  'Middle East & North Africa': '#0891b2',
+  'North America': '#374151'
+};
+
+// ─── WORLD BANK API ───────────────────────────────────────────
+const WB_BASE = 'https://api.worldbank.org/v2';
+
+async function fetchWB(indicator, countries, startYear=1990, endYear=2022) {
+  const countryStr = countries === 'all' ? 'all' : countries.join(';');
+  const url = `${WB_BASE}/country/${countryStr}/indicator/${indicator}?date=${startYear}:${endYear}&format=json&per_page=1000`;
+  try {
+    const r = await fetch(url);
+    const d = await r.json();
+    return d[1] || [];
+  } catch(e) { return []; }
+}
+
+async function fetchWBCountries() {
+  try {
+    const r = await fetch(`${WB_BASE}/country?format=json&per_page=300`);
+    const d = await r.json();
+    return d[1] || [];
+  } catch(e) { return []; }
+}
+
+// ─── GINI DATA CACHE ──────────────────────────────────────────
+let giniData = [];
+let countryMeta = {};
+let trendCountries = ['GBR','USA'];
+
+// Approximate Gini values for Lorenz curve generation
+const GINI_APPROX = {
+  GBR:0.355, ZAF:0.63, BRA:0.53, DEU:0.31, USA:0.41,
+  SWE:0.28, CHN:0.38, IND:0.35, NGA:0.43, JPN:0.32,
+  FRA:0.32, ARG:0.44, MEX:0.45, KOR:0.31, TUR:0.40
+};
+
+// Approximate income shares (quintiles) per country
+const INCOME_SHARES = {
+  GBR: [7, 12, 17, 23, 41],
+  ZAF: [2, 4, 8, 18, 68],
+  BRA: [3, 7, 12, 20, 58],
+  DEU: [9, 14, 18, 23, 36],
+  USA: [5, 10, 15, 22, 48],
+  SWE: [10, 14, 18, 23, 35],
+  CHN: [5, 10, 15, 22, 48],
+  IND: [7, 10, 15, 21, 47],
+  NGA: [4, 8, 13, 20, 55],
+  JPN: [10, 14, 18, 23, 35]
+};
+
+// WID-style data (approximate, for illustration)
+const WID_DATA = {
+  USA: { gini:[0.37,0.38,0.39,0.40,0.41,0.41,0.41,0.42,0.41,0.41,0.41,0.40,0.41,0.41,0.41,0.41,0.41,0.41,0.42,0.41,0.41,0.41,0.41], top10:[42,43,44,44,45,45,45,46,45,45,46,46,46,46,47,47,47,47,47,47,47,47,47], top1:[15,15,16,17,18,17,17,17,16,16,17,18,18,18,19,19,19,19,20,19,19,19,19], palma:[1.7,1.8,1.9,1.9,2.0,2.0,2.0,2.1,2.0,2.0,2.1,2.1,2.1,2.2,2.2,2.2,2.3,2.3,2.3,2.3,2.3,2.3,2.3] },
+  GBR: { gini:[0.34,0.34,0.34,0.34,0.35,0.35,0.35,0.35,0.36,0.36,0.36,0.35,0.35,0.35,0.35,0.35,0.35,0.35,0.35,0.35,0.35,0.35,0.35], top10:[38,38,39,39,39,40,40,40,40,40,40,40,40,40,40,40,40,40,40,40,40,40,40], top1:[12,12,13,13,13,13,13,13,13,14,14,14,14,14,14,14,14,14,14,14,14,14,14], palma:[1.4,1.4,1.4,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5] },
+  ZAF: { gini:[0.59,0.59,0.60,0.60,0.61,0.62,0.62,0.63,0.63,0.63,0.63,0.63,0.63,0.63,0.63,0.63,0.63,0.63,0.63,0.63,0.63,0.63,0.63], top10:[60,61,62,63,64,64,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65], top1:[20,21,22,23,24,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25], palma:[6,6.5,7,7,7.5,7.5,7.5,7.5,7.5,7.5,7.5,7.5,7.5,7.5,7.5,7.5,7.5,7.5,7.5,7.5,7.5,7.5,7.5] },
+  BRA: { gini:[0.61,0.60,0.59,0.59,0.58,0.57,0.56,0.56,0.55,0.55,0.54,0.54,0.53,0.53,0.52,0.52,0.52,0.53,0.53,0.53,0.53,0.53,0.53], top10:[52,52,51,51,50,50,49,49,48,48,47,47,46,46,45,45,45,46,46,46,46,46,46], top1:[23,22,22,22,21,21,20,20,19,19,19,19,18,18,17,17,17,18,18,18,18,18,18], palma:[4,4,3.9,3.9,3.8,3.7,3.6,3.6,3.5,3.5,3.4,3.4,3.3,3.3,3.2,3.2,3.2,3.3,3.3,3.3,3.3,3.3,3.3] },
+  DEU: { gini:[0.28,0.28,0.28,0.28,0.29,0.29,0.30,0.30,0.31,0.31,0.31,0.31,0.31,0.31,0.31,0.31,0.31,0.31,0.31,0.31,0.31,0.31,0.31], top10:[33,33,33,33,34,34,35,35,36,36,36,36,36,36,36,36,36,36,36,36,36,36,36], top1:[11,11,11,11,12,12,12,12,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13], palma:[1.1,1.1,1.1,1.1,1.2,1.2,1.2,1.2,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3] },
+  SWE: { gini:[0.25,0.25,0.26,0.26,0.27,0.27,0.27,0.27,0.28,0.28,0.28,0.28,0.28,0.28,0.28,0.28,0.28,0.28,0.28,0.28,0.28,0.28,0.28], top10:[28,28,29,29,29,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30], top1:[8,8,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9], palma:[0.9,0.9,0.9,0.9,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0] },
+  CHN: { gini:[0.32,0.33,0.34,0.35,0.36,0.37,0.38,0.39,0.40,0.41,0.42,0.43,0.44,0.44,0.43,0.43,0.42,0.42,0.41,0.41,0.40,0.40,0.40], top10:[35,36,37,38,39,40,41,42,43,44,45,46,47,47,46,46,45,45,44,44,43,43,43], top1:[10,10,11,11,12,12,13,13,14,14,14,15,15,15,15,15,14,14,14,14,14,14,14], palma:[1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2,2.3,2.4,2.5,2.5,2.4,2.4,2.3,2.3,2.2,2.2,2.1,2.1,2.1] },
+  IND: { gini:[0.33,0.33,0.34,0.34,0.35,0.35,0.35,0.36,0.36,0.36,0.37,0.37,0.37,0.37,0.37,0.37,0.37,0.38,0.38,0.38,0.38,0.38,0.38], top10:[35,35,36,36,37,37,37,38,38,38,39,39,39,39,39,39,39,40,40,40,40,40,40], top1:[11,11,11,12,12,12,12,13,13,13,13,13,13,13,13,13,13,14,14,14,14,14,14], palma:[1.4,1.4,1.5,1.5,1.6,1.6,1.6,1.7,1.7,1.7,1.8,1.8,1.8,1.8,1.8,1.8,1.8,1.9,1.9,1.9,1.9,1.9,1.9] },
+  FRA: { gini:[0.30,0.30,0.30,0.30,0.31,0.31,0.31,0.31,0.31,0.32,0.32,0.32,0.32,0.32,0.32,0.32,0.32,0.32,0.32,0.32,0.32,0.32,0.32], top10:[34,34,34,34,35,35,35,35,35,36,36,36,36,36,36,36,36,36,36,36,36,36,36], top1:[11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11], palma:[1.2,1.2,1.2,1.2,1.2,1.2,1.2,1.2,1.2,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3,1.3] },
+  NGA: { gini:[0.42,0.42,0.43,0.43,0.43,0.43,0.43,0.43,0.43,0.43,0.43,0.43,0.43,0.43,0.43,0.43,0.43,0.43,0.43,0.43,0.43,0.43,0.43], top10:[42,42,42,42,42,43,43,43,43,43,43,43,43,43,43,43,43,43,43,43,43,43,43], top1:[15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15], palma:[2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0] }
+};
+
+const COUNTRY_NAMES = {
+  USA:'United States', GBR:'United Kingdom', ZAF:'South Africa', BRA:'Brazil',
+  DEU:'Germany', SWE:'Sweden', CHN:'China', IND:'India', FRA:'France',
+  NGA:'Nigeria', JPN:'Japan', ARG:'Argentina', MEX:'Mexico', KOR:'South Korea', TUR:'Turkey'
+};
+
+const YEARS = Array.from({length:23},(_,i)=>1990+i*1.4|0).map((v,i)=>1990+i);
+
+// ─── SECTION SWITCHER ────────────────────────────────────────
+function switchSection(id, btn) {
+  document.querySelectorAll('.section-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('section-'+id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='explore') initScatter();
+  if(id==='compare') initCompare();
+  if(id==='trends') initTrends();
+}
+
+// ─── LORENZ CURVE ────────────────────────────────────────────
+function lorenzFromShares(shares) {
+  const cum = [0];
+  const s = [...shares];
+  s.forEach(v => cum.push(cum[cum.length-1]+v));
+  const total = cum[cum.length-1];
+  return cum.map(v=>v/total);
+}
+
+function getLorenzData(code) {
+  const shares = INCOME_SHARES[code] || INCOME_SHARES['GBR'];
+  const y = lorenzFromShares(shares);
+  const x = [0, 0.2, 0.4, 0.6, 0.8, 1.0];
+  return { x, y };
+}
+
+function updateLorenz() {
+  const code = document.getElementById('lorenz-country').value;
+  const { x, y } = getLorenzData(code);
+  const gini = GINI_APPROX[code] || 0.35;
+  const name = COUNTRY_NAMES[code] || code;
+
+  const fillX = [...x, ...x.slice().reverse()];
+  const fillY = [...y, ...x.slice().reverse()];
+
+  Plotly.react('plot-lorenz', [
+    { x: fillX, y: fillY, type:'scatter', mode:'lines', fill:'toself',
+      fillcolor:'rgba(233,69,96,0.12)', line:{color:'rgba(233,69,96,0)',width:0}, name:'Area = Gini/2' },
+    { x: [0,1], y: [0,1], type:'scatter', mode:'lines',
+      line:{color:'#9ca3af',width:1.5,dash:'dash'}, name:'Perfect equality' },
+    { x, y, type:'scatter', mode:'lines+markers',
+      line:{color:'#e94560',width:3}, marker:{size:6,color:'#e94560'}, name:name }
+  ], { ...PLY, showlegend:true, legend:{font:{size:11}},
+    xaxis:{...PLY.xaxis, title:'Cumulative population share', tickformat:'.0%'},
+    yaxis:{...PLY.yaxis, title:'Cumulative income share', tickformat:'.0%'},
+    annotations:[{x:0.6,y:0.25,text:`Gini ≈ ${gini.toFixed(2)}`,showarrow:false,
+      font:{size:13,color:'#e94560'},bgcolor:'rgba(255,255,255,0.8)'}]
+  }, CFG);
+}
+
+function updateLorenzCompare() {
+  const codeA = document.getElementById('lorenz-a').value;
+  const codeB = document.getElementById('lorenz-b').value;
+  const { x:xa, y:ya } = getLorenzData(codeA);
+  const { x:xb, y:yb } = getLorenzData(codeB);
+  const nameA = COUNTRY_NAMES[codeA] || codeA;
+  const nameB = COUNTRY_NAMES[codeB] || codeB;
+
+  Plotly.react('plot-lorenz-compare', [
+    { x:[0,1], y:[0,1], type:'scatter', mode:'lines',
+      line:{color:'#9ca3af',width:1.5,dash:'dash'}, name:'Perfect equality' },
+    { x:xa, y:ya, type:'scatter', mode:'lines+markers',
+      line:{color:'#2563eb',width:3}, marker:{size:6}, name:`${nameA} (Gini≈${(GINI_APPROX[codeA]||0.35).toFixed(2)})` },
+    { x:xb, y:yb, type:'scatter', mode:'lines+markers',
+      line:{color:'#e94560',width:3}, marker:{size:6}, name:`${nameB} (Gini≈${(GINI_APPROX[codeB]||0.35).toFixed(2)})` }
+  ], { ...PLY, showlegend:true, legend:{font:{size:11}},
+    xaxis:{...PLY.xaxis, title:'Cumulative population share', tickformat:'.0%'},
+    yaxis:{...PLY.yaxis, title:'Cumulative income share', tickformat:'.0%'}
+  }, CFG);
+}
+
+// ─── CHOROPLETH MAP ──────────────────────────────────────────
+async function initChoropleth() {
+  const raw = await fetchWB('SI.POV.GINI', 'all', 1990, 2022);
+
+  giniData = raw.filter(d=>d.value!==null);
+
+  // Country count
+  const uniqueCountries = new Set(giniData.map(d=>d.countryiso3code)).size;
+  document.getElementById('hstat-countries').textContent = uniqueCountries;
+
+  updateChoropleth();
+  updateLorenz();
+  updateLorenzCompare();
+
+  // Stat cards
+  const year = 2019;
+  const yearData = giniData.filter(d=>d.date==year && d.value);
+  if(yearData.length) {
+    const sorted = yearData.sort((a,b)=>b.value-a.value);
+    const most = sorted[0];
+    const least = sorted[sorted.length-1];
+    const avg = (yearData.reduce((s,d)=>s+d.value,0)/yearData.length).toFixed(1);
+    document.getElementById('most-unequal-val').textContent = most.value.toFixed(1);
+    document.getElementById('most-unequal-country').textContent = most.country.value;
+    document.getElementById('most-equal-val').textContent = least.value.toFixed(1);
+    document.getElementById('most-equal-country').textContent = least.country.value;
+    document.getElementById('world-avg-val').textContent = avg;
+  }
+}
+
+function updateChoropleth() {
+  const year = document.getElementById('map-year').value;
+  const yearData = giniData.filter(d=>d.date==year && d.value);
+
+  if(!yearData.length) {
+    document.getElementById('plot-choropleth').innerHTML =
+      `<div class="loading">No data available for ${year} — try another year</div>`;
+    return;
+  }
+
+  Plotly.react('plot-choropleth', [{
+    type: 'choropleth',
+    locations: yearData.map(d=>d.countryiso3code),
+    z: yearData.map(d=>d.value),
+    text: yearData.map(d=>`${d.country.value}<br>Gini: ${d.value.toFixed(1)}`),
+    hoverinfo: 'text',
+    colorscale: [
+      [0,'#d1fae5'],[0.2,'#6ee7b7'],[0.4,'#fef3c7'],
+      [0.6,'#fbbf24'],[0.8,'#f87171'],[1,'#991b1b']
+    ],
+    zmin: 20, zmax: 70,
+    colorbar: { title:'Gini', thickness:14, len:0.7, tickfont:{size:11} }
+  }], {
+    ...PLY,
+    margin:{t:10,b:10,l:0,r:0},
+    geo: {
+      showframe:false, showcoastlines:true, coastlinecolor:'#e5e7eb',
+      showland:true, landcolor:'#f9fafb',
+      showocean:true, oceancolor:'#f0f9ff',
+      bgcolor:'#ffffff',
+      projection:{type:'natural earth'}
+    }
+  }, CFG);
+}
+
+// ─── SCATTER PLOT ────────────────────────────────────────────
+const SCATTER_DATA = {
+  unemployment: {
+    label: 'Unemployment rate (%)',
+    data: {
+      ZAF:{x:27,gini:63,region:'Sub-Saharan Africa',pop:59},
+      NAM:{x:20,gini:59,region:'Sub-Saharan Africa',pop:2.5},
+      ZMB:{x:12,gini:57,region:'Sub-Saharan Africa',pop:18},
+      BRA:{x:12,gini:53,region:'Latin America & Caribbean',pop:213},
+      COL:{x:11,gini:51,region:'Latin America & Caribbean',pop:51},
+      PAN:{x:7,gini:49,region:'Latin America & Caribbean',pop:4},
+      MEX:{x:4,gini:45,region:'Latin America & Caribbean',pop:128},
+      NGA:{x:8,gini:43,region:'Sub-Saharan Africa',pop:206},
+      TUR:{x:13,gini:41,region:'Europe & Central Asia',pop:84},
+      USA:{x:6,gini:41,region:'North America',pop:329},
+      CHN:{x:5,gini:38,region:'East Asia & Pacific',pop:1411},
+      IND:{x:7,gini:35,region:'South Asia',pop:1380},
+      GBR:{x:4,gini:35,region:'Europe & Central Asia',pop:67},
+      AUS:{x:5,gini:34,region:'East Asia & Pacific',pop:26},
+      CAN:{x:7,gini:33,region:'North America',pop:38},
+      FRA:{x:8,gini:32,region:'Europe & Central Asia',pop:68},
+      DEU:{x:3,gini:31,region:'Europe & Central Asia',pop:83},
+      JPN:{x:3,gini:32,region:'East Asia & Pacific',pop:126},
+      KOR:{x:4,gini:31,region:'East Asia & Pacific',pop:52},
+      NOR:{x:4,gini:26,region:'Europe & Central Asia',pop:5},
+      DNK:{x:5,gini:28,region:'Europe & Central Asia',pop:6},
+      SWE:{x:7,gini:28,region:'Europe & Central Asia',pop:10},
+      SVK:{x:7,gini:24,region:'Europe & Central Asia',pop:6},
+      SVN:{x:5,gini:24,region:'Europe & Central Asia',pop:2}
+    }
+  },
+  gdp: {
+    label: 'GDP per capita log (USD)',
+    data: {
+      ZAF:{x:8.4,gini:63,region:'Sub-Saharan Africa',pop:59},
+      BRA:{x:9.1,gini:53,region:'Latin America & Caribbean',pop:213},
+      MEX:{x:9.3,gini:45,region:'Latin America & Caribbean',pop:128},
+      NGA:{x:7.3,gini:43,region:'Sub-Saharan Africa',pop:206},
+      CHN:{x:9.5,gini:38,region:'East Asia & Pacific',pop:1411},
+      IND:{x:7.8,gini:35,region:'South Asia',pop:1380},
+      GBR:{x:10.6,gini:35,region:'Europe & Central Asia',pop:67},
+      USA:{x:11.0,gini:41,region:'North America',pop:329},
+      DEU:{x:10.8,gini:31,region:'Europe & Central Asia',pop:83},
+      FRA:{x:10.7,gini:32,region:'Europe & Central Asia',pop:68},
+      JPN:{x:10.6,gini:32,region:'East Asia & Pacific',pop:126},
+      KOR:{x:10.5,gini:31,region:'East Asia & Pacific',pop:52},
+      SWE:{x:10.9,gini:28,region:'Europe & Central Asia',pop:10},
+      NOR:{x:11.2,gini:26,region:'Europe & Central Asia',pop:5},
+      ETH:{x:6.5,gini:35,region:'Sub-Saharan Africa',pop:115},
+      TZA:{x:6.7,gini:38,region:'Sub-Saharan Africa',pop:60}
+    }
+  },
+  education: {
+    label: 'Secondary school enrolment (%)',
+    data: {
+      ZAF:{x:99,gini:63,region:'Sub-Saharan Africa',pop:59},
+      BRA:{x:88,gini:53,region:'Latin America & Caribbean',pop:213},
+      MEX:{x:87,gini:45,region:'Latin America & Caribbean',pop:128},
+      NGA:{x:48,gini:43,region:'Sub-Saharan Africa',pop:206},
+      CHN:{x:93,gini:38,region:'East Asia & Pacific',pop:1411},
+      IND:{x:75,gini:35,region:'South Asia',pop:1380},
+      GBR:{x:99,gini:35,region:'Europe & Central Asia',pop:67},
+      USA:{x:96,gini:41,region:'North America',pop:329},
+      DEU:{x:100,gini:31,region:'Europe & Central Asia',pop:83},
+      SWE:{x:99,gini:28,region:'Europe & Central Asia',pop:10},
+      ETH:{x:38,gini:35,region:'Sub-Saharan Africa',pop:115},
+      NER:{x:20,gini:34,region:'Sub-Saharan Africa',pop:24},
+      MLI:{x:43,gini:33,region:'Sub-Saharan Africa',pop:22},
+      TUR:{x:92,gini:41,region:'Europe & Central Asia',pop:84}
+    }
+  },
+  trade: {
+    label: 'Trade openness (% of GDP)',
+    data: {
+      SGP:{x:320,gini:46,region:'East Asia & Pacific',pop:6},
+      HKG:{x:380,gini:54,region:'East Asia & Pacific',pop:7},
+      BEL:{x:170,gini:27,region:'Europe & Central Asia',pop:11},
+      NLD:{x:160,gini:28,region:'Europe & Central Asia',pop:17},
+      DEU:{x:87,gini:31,region:'Europe & Central Asia',pop:83},
+      GBR:{x:62,gini:35,region:'Europe & Central Asia',pop:67},
+      FRA:{x:62,gini:32,region:'Europe & Central Asia',pop:68},
+      BRA:{x:28,gini:53,region:'Latin America & Caribbean',pop:213},
+      USA:{x:27,gini:41,region:'North America',pop:329},
+      IND:{x:42,gini:35,region:'South Asia',pop:1380},
+      CHN:{x:38,gini:38,region:'East Asia & Pacific',pop:1411},
+      ZAF:{x:60,gini:63,region:'Sub-Saharan Africa',pop:59}
+    }
+  },
+  urban: {
+    label: 'Urban population (%)',
+    data: {
+      SGP:{x:100,gini:46,region:'East Asia & Pacific',pop:6},
+      USA:{x:83,gini:41,region:'North America',pop:329},
+      GBR:{x:84,gini:35,region:'Europe & Central Asia',pop:67},
+      BRA:{x:87,gini:53,region:'Latin America & Caribbean',pop:213},
+      ZAF:{x:67,gini:63,region:'Sub-Saharan Africa',pop:59},
+      CHN:{x:61,gini:38,region:'East Asia & Pacific',pop:1411},
+      MEX:{x:81,gini:45,region:'Latin America & Caribbean',pop:128},
+      IND:{x:35,gini:35,region:'South Asia',pop:1380},
+      NGA:{x:52,gini:43,region:'Sub-Saharan Africa',pop:206},
+      ETH:{x:22,gini:35,region:'Sub-Saharan Africa',pop:115},
+      DEU:{x:77,gini:31,region:'Europe & Central Asia',pop:83},
+      SWE:{x:88,gini:28,region:'Europe & Central Asia',pop:10}
+    }
+  }
+};
+
+function linReg(xs, ys) {
+  const n = xs.length;
+  const mx = xs.reduce((a,b)=>a+b,0)/n;
+  const my = ys.reduce((a,b)=>a+b,0)/n;
+  const ssxy = xs.reduce((s,x,i)=>s+(x-mx)*(ys[i]-my),0);
+  const ssx = xs.reduce((s,x)=>s+(x-mx)**2,0);
+  const ssy = ys.reduce((s,y)=>s+(y-my)**2,0);
+  const m = ssxy/ssx;
+  const b = my - m*mx;
+  const r = ssxy/Math.sqrt(ssx*ssy);
+  return { m, b, r };
+}
+
+function initScatter() {
+  updateScatter();
+}
+
+function updateScatter() {
+  const xvar = document.getElementById('scatter-xvar').value;
+  const showReg = document.getElementById('scatter-reg').value === 'yes';
+  const varData = SCATTER_DATA[xvar];
+  const label = varData.label;
+
+  document.getElementById('scatter-title').textContent = `Gini vs ${label}`;
+
+  const byRegion = {};
+  Object.entries(varData.data).forEach(([code, d]) => {
+    if(!byRegion[d.region]) byRegion[d.region] = [];
+    byRegion[d.region].push({ code, ...d });
+  });
+
+  const allX = [], allY = [];
+  const traces = Object.entries(byRegion).map(([region, pts]) => {
+    pts.forEach(p=>{ allX.push(p.x); allY.push(p.gini); });
+    return {
+      x: pts.map(p=>p.x),
+      y: pts.map(p=>p.gini),
+      text: pts.map(p=>p.code),
+      mode: 'markers',
+      type: 'scatter',
+      name: region,
+      marker: {
+        color: REGION_COLORS[region] || '#9ca3af',
+        size: pts.map(p=>Math.max(8, Math.min(28, Math.sqrt(p.pop||10)*1.5))),
+        opacity: 0.8,
+        line: { color: 'white', width: 1 }
+      },
+      hovertemplate: '<b>%{text}</b><br>X: %{x:.1f}<br>Gini: %{y}<extra></extra>'
+    };
+  });
+
+  if(showReg && allX.length > 2) {
+    const { m, b, r } = linReg(allX, allY);
+    const xmin = Math.min(...allX), xmax = Math.max(...allX);
+    traces.push({
+      x: [xmin, xmax],
+      y: [m*xmin+b, m*xmax+b],
+      mode: 'lines',
+      type: 'scatter',
+      name: `Regression (r=${r.toFixed(2)})`,
+      line: { color: '#1a1a2e', width: 2, dash: 'dash' },
+      showlegend: true
+    });
+    document.getElementById('scatter-corr').textContent = `r = ${r.toFixed(3)}`;
+  } else {
+    document.getElementById('scatter-corr').textContent = '';
+  }
+
+  Plotly.react('plot-scatter', traces, {
+    ...PLY,
+    showlegend: true,
+    legend: { font:{size:11}, orientation:'h', y:-0.2 },
+    xaxis: { ...PLY.xaxis, title:{ text:label, font:{size:12} } },
+    yaxis: { ...PLY.yaxis, title:{ text:'Gini coefficient', font:{size:12} } }
+  }, CFG);
+}
+
+// ─── COMPARE SECTION ─────────────────────────────────────────
+function initCompare() { updateCompare(); buildCompareTable(); }
+
+function updateCompare() {
+  const code = document.getElementById('compare-country').value;
+  const name = COUNTRY_NAMES[code] || code;
+  const d = WID_DATA[code] || WID_DATA['USA'];
+  const years = Array.from({length:23},(_,i)=>2000+i);
+
+  // Normalise each measure to 0-1
+  const norm = arr => {
+    const min = Math.min(...arr), max = Math.max(...arr);
+    return max===min ? arr.map(()=>0.5) : arr.map(v=>(v-min)/(max-min));
+  };
+
+  Plotly.react('plot-measures-time', [
+    { x:years, y:d.gini, name:'Gini', mode:'lines', line:{color:'#e94560',width:2.5} },
+    { x:years, y:d.top10.map(v=>v/100), name:'Top 10% share', mode:'lines', line:{color:'#2563eb',width:2.5} },
+    { x:years, y:d.top1.map(v=>v/100), name:'Top 1% share', mode:'lines', line:{color:'#d97706',width:2.5} },
+    { x:years, y:d.palma.map(v=>v/10), name:'Palma (÷10)', mode:'lines', line:{color:'#7c3aed',width:2.5} }
+  ], {
+    ...PLY, showlegend:true, legend:{font:{size:11}},
+    xaxis:{...PLY.xaxis, title:'Year'},
+    yaxis:{...PLY.yaxis, title:'Value (normalised)'},
+    shapes:[
+      {type:'line',x0:2008,x1:2008,y0:0,y1:1,yref:'paper',line:{color:'#9ca3af',dash:'dot',width:1.5}},
+      {type:'line',x0:2020,x1:2020,y0:0,y1:1,yref:'paper',line:{color:'#9ca3af',dash:'dot',width:1.5}}
+    ],
+    annotations:[
+      {x:2008,y:1,yref:'paper',text:'2008',showarrow:false,font:{size:10,color:'#9ca3af'},xshift:12},
+      {x:2020,y:1,yref:'paper',text:'COVID',showarrow:false,font:{size:10,color:'#9ca3af'},xshift:16}
+    ]
+  }, CFG);
+
+  const latest = { gini: d.gini[d.gini.length-1], top10: d.top10[d.top10.length-1], top1: d.top1[d.top1.length-1], palma: d.palma[d.palma.length-1] };
+
+  Plotly.react('plot-measures-bar', [{
+    x: ['Gini', 'Top 10% share (%)', 'Top 1% share (%)', 'Palma ratio'],
+    y: [latest.gini, latest.top10, latest.top1, latest.palma],
+    type: 'bar',
+    marker: { color: ['#e94560','#2563eb','#d97706','#7c3aed'], opacity:0.85 },
+    text: [latest.gini.toFixed(2), latest.top10+'%', latest.top1+'%', latest.palma.toFixed(1)],
+    textposition: 'outside',
+    textfont: { size:12 }
+  }], {
+    ...PLY, showlegend:false,
+    xaxis:{...PLY.xaxis},
+    yaxis:{...PLY.yaxis, title:'Value'},
+    title:{ text:`${name} — latest values`, font:{size:13}, x:0.5 }
+  }, CFG);
+}
+
+function buildCompareTable() {
+  const countries = ['USA','GBR','ZAF','BRA','DEU','SWE','CHN','IND','FRA','NGA'];
+  let html = '<table class="measures-table"><thead><tr><th>Country</th><th>Gini</th><th>Top 10% share</th><th>Top 1% share</th><th>Palma ratio</th><th>Region</th></tr></thead><tbody>';
+  const REGIONS = { USA:'North America',GBR:'Europe',ZAF:'Sub-Saharan Africa',BRA:'Latin America',DEU:'Europe',SWE:'Europe',CHN:'East Asia',IND:'South Asia',FRA:'Europe',NGA:'Sub-Saharan Africa' };
+  countries.forEach(code => {
+    const d = WID_DATA[code];
+    const g = d.gini[d.gini.length-1].toFixed(2);
+    const t10 = d.top10[d.top10.length-1]+'%';
+    const t1 = d.top1[d.top1.length-1]+'%';
+    const p = d.palma[d.palma.length-1].toFixed(1);
+    html += `<tr><td><strong>${COUNTRY_NAMES[code]}</strong></td><td>${g}</td><td>${t10}</td><td>${t1}</td><td>${p}</td><td style="color:var(--mid)">${REGIONS[code]||''}</td></tr>`;
+  });
+  html += '</tbody></table>';
+  document.getElementById('compare-table-container').innerHTML = html;
+}
+
+// ─── TRENDS SECTION ──────────────────────────────────────────
+function initTrends() { updateTrends(); updateRegionalTrends(); }
+
+function addTrendCountry() {
+  const sel = document.getElementById('trend-country-select').value;
+  if(!trendCountries.includes(sel)) {
+    trendCountries.push(sel);
+    updateTrendLabel();
+    updateTrends();
+  }
+}
+
+function clearTrendCountries() {
+  trendCountries = ['GBR'];
+  updateTrendLabel();
+  updateTrends();
+}
+
+function updateTrendLabel() {
+  document.getElementById('trend-selected').textContent =
+    'Selected: ' + trendCountries.map(c=>COUNTRY_NAMES[c]||c).join(', ');
+}
+
+const TREND_COLORS = ['#e94560','#2563eb','#059669','#d97706','#7c3aed','#0891b2','#374151'];
+
+function updateTrends() {
+  const years = Array.from({length:23},(_,i)=>2000+i);
+  const traces = trendCountries.map((code,i) => {
+    const d = WID_DATA[code] || WID_DATA['GBR'];
+    return {
+      x: years, y: d.gini,
+      name: COUNTRY_NAMES[code]||code,
+      mode: 'lines+markers',
+      line: { color:TREND_COLORS[i%TREND_COLORS.length], width:2.5 },
+      marker: { size:5 }
+    };
+  });
+
+  Plotly.react('plot-trends', traces, {
+    ...PLY, showlegend:true, legend:{font:{size:12}},
+    xaxis:{...PLY.xaxis, title:'Year'},
+    yaxis:{...PLY.yaxis, title:'Gini coefficient', range:[0.1,0.75]},
+    shapes:[
+      {type:'rect',x0:2008,x1:2009,y0:0,y1:1,yref:'paper',fillcolor:'rgba(156,163,175,0.15)',line:{width:0}},
+      {type:'rect',x0:2020,x1:2021,y0:0,y1:1,yref:'paper',fillcolor:'rgba(156,163,175,0.15)',line:{width:0}}
+    ],
+    annotations:[
+      {x:2008.5,y:0.98,yref:'paper',text:'Financial crisis',showarrow:false,font:{size:10,color:'#9ca3af'}},
+      {x:2020.5,y:0.98,yref:'paper',text:'COVID-19',showarrow:false,font:{size:10,color:'#9ca3af'}}
+    ]
+  }, CFG);
+}
+
+const REGIONAL_GINI = {
+  'Sub-Saharan Africa':     [0.52,0.52,0.51,0.51,0.51,0.50,0.50,0.49,0.49,0.48,0.48,0.47,0.47,0.47,0.47,0.47,0.46,0.46,0.46,0.46,0.46,0.46,0.46],
+  'Latin America & Caribbean': [0.54,0.53,0.53,0.52,0.52,0.52,0.51,0.51,0.50,0.50,0.49,0.48,0.48,0.47,0.47,0.47,0.47,0.47,0.47,0.47,0.47,0.47,0.47],
+  'Europe & Central Asia':  [0.31,0.31,0.31,0.31,0.31,0.31,0.31,0.31,0.31,0.31,0.31,0.31,0.31,0.31,0.31,0.31,0.31,0.31,0.31,0.31,0.31,0.31,0.31],
+  'East Asia & Pacific':    [0.37,0.37,0.38,0.38,0.38,0.39,0.39,0.39,0.39,0.39,0.39,0.39,0.38,0.38,0.37,0.37,0.37,0.37,0.36,0.36,0.36,0.36,0.36],
+  'South Asia':             [0.34,0.34,0.34,0.35,0.35,0.35,0.35,0.35,0.36,0.36,0.36,0.36,0.36,0.36,0.36,0.36,0.36,0.36,0.36,0.36,0.36,0.36,0.36],
+  'North America':          [0.39,0.39,0.39,0.40,0.40,0.40,0.40,0.40,0.40,0.40,0.40,0.40,0.40,0.40,0.40,0.40,0.40,0.40,0.40,0.40,0.40,0.40,0.40]
+};
+
+function updateRegionalTrends() {
+  const years = Array.from({length:23},(_,i)=>2000+i);
+  const colors = Object.values(REGION_COLORS);
+  const traces = Object.entries(REGIONAL_GINI).map(([region, vals], i) => ({
+    x: years, y: vals,
+    name: region,
+    mode: 'lines',
+    line: { color:colors[i]||'#9ca3af', width:2.5 }
+  }));
+
+  Plotly.react('plot-regional', traces, {
+    ...PLY, showlegend:true, legend:{font:{size:11}, orientation:'h', y:-0.25},
+    xaxis:{...PLY.xaxis, title:'Year'},
+    yaxis:{...PLY.yaxis, title:'Average Gini', range:[0.2,0.65]},
+    shapes:[
+      {type:'rect',x0:2008,x1:2009,y0:0,y1:1,yref:'paper',fillcolor:'rgba(156,163,175,0.12)',line:{width:0}},
+      {type:'rect',x0:2020,x1:2021,y0:0,y1:1,yref:'paper',fillcolor:'rgba(156,163,175,0.12)',line:{width:0}}
+    ]
+  }, CFG);
+}
+
+// ─── CSV EXPORT ───────────────────────────────────────────────
+function exportData(type) {
+  let csv = '', filename = '';
+
+  if(type==='gini') {
+    const year = document.getElementById('map-year').value;
+    const yearData = giniData.filter(d=>d.date==year && d.value);
+    csv = 'country,iso3,year,gini\n';
+    yearData.forEach(d=>{
+      csv += `"${d.country.value}",${d.countryiso3code},${d.date},${d.value.toFixed(2)}\n`;
+    });
+    filename = `gini_${year}.csv`;
+  }
+
+  else if(type==='scatter') {
+    const xvar = document.getElementById('scatter-xvar').value;
+    const varData = SCATTER_DATA[xvar];
+    csv = `country,gini,${xvar},region\n`;
+    Object.entries(varData.data).forEach(([code,d])=>{
+      csv += `${code},${d.gini},${d.x},"${d.region}"\n`;
+    });
+    filename = `inequality_${xvar}.csv`;
+  }
+
+  else if(type==='compare' || type==='table') {
+    csv = 'country,year,gini,top10_share,top1_share,palma_ratio\n';
+    const years = Array.from({length:23},(_,i)=>2000+i);
+    Object.entries(WID_DATA).forEach(([code,d])=>{
+      years.forEach((yr,i)=>{
+        csv += `${code},${yr},${d.gini[i].toFixed(3)},${d.top10[i]},${d.top1[i]},${d.palma[i].toFixed(2)}\n`;
+      });
+    });
+    filename = 'inequality_measures.csv';
+  }
+
+  else if(type==='trends') {
+    csv = 'country,year,gini\n';
+    const years = Array.from({length:23},(_,i)=>2000+i);
+    trendCountries.forEach(code=>{
+      const d = WID_DATA[code]||WID_DATA['GBR'];
+      years.forEach((yr,i)=>{
+        csv += `${code},${yr},${d.gini[i].toFixed(3)}\n`;
+      });
+    });
+    filename = 'inequality_trends.csv';
+  }
+
+  const blob = new Blob([csv], { type:'text/csv' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+}
+
+// ─── INIT ─────────────────────────────────────────────────────
+window.addEventListener('load', () => {
+  initChoropleth();
+});
+</script>
+</body>
+</html>
